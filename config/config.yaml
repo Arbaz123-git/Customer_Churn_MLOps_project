@@ -1,0 +1,59 @@
+data:
+  raw_path: data/WA_Fn-UseC_-Telco-Customer-Churn.csv
+  id_col: customerID
+  target: Churn
+
+features:
+  binary:
+    - gender
+    - Partner
+    - Dependents
+    - PhoneService
+    - PaperlessBilling
+  categorical:
+    - MultipleLines
+    - InternetService
+    - OnlineSecurity
+    - OnlineBackup
+    - DeviceProtection
+    - TechSupport
+    - StreamingTV
+    - StreamingMovies
+    - Contract
+    - PaymentMethod
+
+split:
+  test_size: 0.2
+  random_state: 42
+  stratify: true
+
+threshold: 0.3
+
+# Frozen hyperparameters from the approved MLflow run (Optuna-tuned XGBoost).
+# scale_pos_weight is computed at train time from y_train, not hardcoded here.
+model:
+  params:
+    n_estimators: 701
+    learning_rate: 0.028926850131655767
+    max_depth: 4
+    subsample: 0.9425919589260033
+    colsample_bytree: 0.8333729131273968
+    min_child_weight: 3
+    gamma: 4.316033047803303
+    reg_alpha: 3.3404299712215826
+    reg_lambda: 3.063610880810913
+    random_state: 42
+    n_jobs: -1
+    eval_metric: logloss
+
+mlflow:
+  tracking_uri: "sqlite:///mlflow.db"
+  experiment: "Telco Churn - XGBoost"
+  registered_model: "telco-churn-xgb"
+
+# Metrics of the approved run this pipeline reproduces (used for a parity check).
+reference:
+  run_id: "69f2cdaac4d34b6892734b3f73cdd5ca"
+  recall: 0.922459893048128
+  roc_auc: 0.846432354232866
+  tolerance: 0.01
